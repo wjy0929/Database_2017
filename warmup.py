@@ -9,7 +9,7 @@ import struct
 
 class Lineitem(object):
   # The format string, for use with the struct module.
-  fmt = ""
+  fmt = "4I4fss10s10s10s25s10s44s"
   # Initialize the columns in Lineitem with proper representation.
   l_orderkey = int
   l_partkey = int
@@ -52,14 +52,20 @@ class Lineitem(object):
 
   # Pack this lineitem object into a bytes object.
   def pack(self):
-    self.fmt = "4I4fss10s10s10s25s10s44s"
     return struct.pack(self.fmt, self.l_orderkey, self.l_partkey, self.l_suppkey, self.l_linenumber, self.l_quantity, self.l_extendedprice, self.l_discount, self.l_tax, self.l_returnflag, self.l_linestatus, self.l_shipdate, self.l_commitdate, self.l_receiptdate, self.l_shipinstruct, self.l_shipmode, self.l_comment)
 
 
   # Construct a lineitem object from a bytes object.
   @classmethod
   def unpack(cls, byts):
-    raise NotImplementedError()
+    temp = struct.unpack(cls.fmt, byts)
+    new_input = []
+    for i in temp:
+      if isinstance(i, str):
+        new_input.append(i.split('\x00')[0])
+      else:
+        new_input.append(i)
+    return Orders(new_input[0], new_input[1], new_input[2], new_input[3], new_input[4], new_input[5], new_input[6], new_input[7], new_input[8], new_input[9], new_input[10], new_input[11], new_input[12], new_input[13], new_input[14], new_input[15])
 
   # Return the size of the packed representation.
   # Do not change.
@@ -70,7 +76,7 @@ class Lineitem(object):
     
 class Orders(object):
   # The format string, for use with the struct module.
-  fmt = ""
+  fmt = "2Isf10s15s15sI79s"
 
   # Initialize the columns 
   o_orderkey = int
@@ -100,14 +106,20 @@ class Orders(object):
 
   # Pack this orders object into a bytes object.
   def pack(self):
-    self.fmt = "2Isf10s15s15sI79s"
     return struct.pack(self.fmt, self.o_orderkey, self.o_custkey, self.o_orderstatus, self.o_totalprice, self.o_orderdate, self.o_orderpriority, self.o_clerk, self.o_shippriority, self.o_comment)
 
 
   # Construct an orders object from a bytes object.
   @classmethod
   def unpack(cls, byts):
-    raise NotImplementedError()
+    temp = struct.unpack(cls.fmt, byts)
+    new_input = []
+    for i in temp:
+      if isinstance(i, str):
+        new_input.append(i.split('\x00')[0])
+      else:
+        new_input.append(i)
+    return Orders(new_input[0], new_input[1], new_input[2], new_input[3], new_input[4], new_input[5], new_input[6], new_input[7], new_input[8])
   
   # Return the size of the packed representation.
   # Do not change.
