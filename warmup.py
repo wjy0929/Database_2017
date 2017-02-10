@@ -65,7 +65,7 @@ class Lineitem(object):
         new_input.append(i.split('\x00')[0])
       else:
         new_input.append(i)
-    return Orders(new_input[0], new_input[1], new_input[2], new_input[3], new_input[4], new_input[5], new_input[6], new_input[7], new_input[8], new_input[9], new_input[10], new_input[11], new_input[12], new_input[13], new_input[14], new_input[15])
+    return Lineitem(new_input[0], new_input[1], new_input[2], new_input[3], new_input[4], new_input[5], new_input[6], new_input[7], new_input[8], new_input[9], new_input[10], new_input[11], new_input[12], new_input[13], new_input[14], new_input[15])
 
   # Return the size of the packed representation.
   # Do not change.
