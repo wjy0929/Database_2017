@@ -410,6 +410,7 @@ class Page(BytesIO):
       start = tupleIndex * self.header.tupleSize + self.header.headerSize()
       end = start + self.header.tupleSize
       self.getbuffer()[start: end] = tupleData
+      self.setDirty(True)
     else:
       return None
 
@@ -420,6 +421,7 @@ class Page(BytesIO):
       (tupleIndex, start, end) = self.header.nextTupleRange()
       self.getbuffer()[start: end] = tupleData
       return TupleId(self.pageId, tupleIndex)
+      self.setDirty(True)
     else: 
       raise ValueError("No enough memory for insertion!")
 
@@ -433,6 +435,7 @@ class Page(BytesIO):
       end = start + self.header.tupleSize
       for i in range(start, end):
         self.getbuffer()[i] = 0
+      self.setDirty(True)
     else:
       return None
 
@@ -447,6 +450,7 @@ class Page(BytesIO):
         shift1 = (i+1) * self.header.tupleSize
         self.getbuffer()[start+shift : end+shift] = self.getbuffer()[start+shift1 : end+shift1]
       self.header.freeSpaceOffset -= self.header.tupleSize
+      self.setDirty(True)
     else:
       raise ValueError("No such item")
 
